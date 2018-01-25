@@ -1,4 +1,4 @@
-package me.chenzz.mybatis.rw;
+package org.mybatis.rw;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

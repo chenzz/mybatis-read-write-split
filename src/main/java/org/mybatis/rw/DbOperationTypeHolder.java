@@ -1,4 +1,4 @@
-package me.chenzz.mybatis.rw;
+package org.mybatis.rw;
 
 /**
  * @Author: chenzz

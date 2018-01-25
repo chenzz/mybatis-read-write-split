@@ -1,4 +1,4 @@
-package me.chenzz.mybatis.rw;
+package org.mybatis.rw;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
