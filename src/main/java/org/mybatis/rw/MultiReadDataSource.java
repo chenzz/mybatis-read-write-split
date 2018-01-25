@@ -32,7 +32,6 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
 
 
     public void afterPropertiesSet() {
-        super.afterPropertiesSet();
 
         //参数检查
         if (null == masterDataSource) {
@@ -60,6 +59,8 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
             Object lookupKey = resolveSpecifiedLookupKey(entry.getKey());
             this.allDataSourceKeyList.add(lookupKey);
         }
+
+        super.afterPropertiesSet();
     }
 
     //获取数据源对应的key
