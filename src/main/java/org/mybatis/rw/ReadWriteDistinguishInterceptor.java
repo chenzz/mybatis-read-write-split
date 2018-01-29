@@ -30,6 +30,8 @@ public class ReadWriteDistinguishInterceptor implements Interceptor {
 
         if (SqlCommandType.SELECT == mappedStatement.getSqlCommandType()) {
             DbOperationTypeHolder.setDataSourceType(DbOperationType.READ);
+        } else {
+            DbOperationTypeHolder.setDataSourceType(DbOperationType.UPDATE);
         }
 
         return invocation.proceed();
