@@ -64,7 +64,7 @@ mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类�
 
 ### 3、内部实现
 
-![](https://ws2.sinaimg.cn/large/006tNc79ly1fnxif8df50j30xy0p7ac6.jpg)
+![](https://ws3.sinaimg.cn/large/006tNc79ly1fnxk33nhwdj315f0uqtbm.jpg)
 
 1. Mapper调用MyBatis进行读写
 2. MyBatis分析读写类型，并存入ThreadLocal中
