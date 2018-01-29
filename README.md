@@ -4,7 +4,7 @@
 
 * 用处
 
-mybatis-read-write-split 用来实现读写分离。
+mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类库。
 
 * 原理
 
