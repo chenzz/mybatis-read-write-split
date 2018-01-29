@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ReadDataSplitSource extends AbstractRoutingDataSource
+public class ReadWriteSplitSource extends AbstractRoutingDataSource
 {
 
-    private Logger LOGGER = LoggerFactory.getLogger(ReadDataSplitSource.class);
+    private Logger LOGGER = LoggerFactory.getLogger(ReadWriteSplitSource.class);
     private static final String MASTER = "master";
 
     private Object masterDataSource;
