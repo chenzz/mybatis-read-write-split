@@ -1,5 +1,7 @@
-package org.mybatis.rw;
+package org.mybatis.rw.datasource;
 
+import org.mybatis.rw.holder.DbOperationType;
+import org.mybatis.rw.holder.DbOperationTypeHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -10,17 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MultiReadDataSource extends AbstractRoutingDataSource
+public class ReadDataSplitSource extends AbstractRoutingDataSource
 {
 
-    private Logger LOGGER = LoggerFactory.getLogger(MultiReadDataSource.class);
+    private Logger LOGGER = LoggerFactory.getLogger(ReadDataSplitSource.class);
     private static final String MASTER = "master";
 
     private Object masterDataSource;
     private List<Object> slaveDataSourceList;
 
     private Map<Object, Object> allDataSources;
-    private List<Object> allDataSourceKeyList;
+    private List<Object> readDataSourceKeyList;
 
     public void setMasterDataSource(Object masterDataSource) {
         this.masterDataSource = masterDataSource;
@@ -43,22 +45,23 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
 
         //把masterDataSource和slaveDataSourceList丢进targetDataSources中
         allDataSources = new HashMap<>();
+        readDataSourceKeyList = new ArrayList<>(slaveDataSourceList.size());
+
+
+        //添加主库
         allDataSources.put(MASTER, masterDataSource);
+
+        //添加从库
         for (int i = 0; i < slaveDataSourceList.size(); i++) {
-            allDataSources.put("slave" + i, slaveDataSourceList.get(i));
+            String dataSourceKey = "slave" + i;
+            allDataSources.put(dataSourceKey, slaveDataSourceList.get(i));
+            readDataSourceKeyList.add(dataSourceKey);
         }
 
         //设置父类的targetDataSource属性
         super.setDefaultTargetDataSource(masterDataSource);
         super.setTargetDataSources(allDataSources);
 
-
-        //获取所有的dataSource的key
-        this.allDataSourceKeyList = new ArrayList<>(this.allDataSources.size());
-        for (Map.Entry entry : this.allDataSources.entrySet()) {
-            Object lookupKey = resolveSpecifiedLookupKey(entry.getKey());
-            this.allDataSourceKeyList.add(lookupKey);
-        }
 
         super.afterPropertiesSet();
     }
@@ -71,9 +74,9 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
 
         if (DbOperationType.READ == dbOperationType) {
 
-            //如果读操作，从所有数据源中随机获取一个数据源
-            int randomNum = ThreadLocalRandom.current().nextInt(0, allDataSourceKeyList.size());
-            String dataSourceKey = (String) allDataSourceKeyList.get(randomNum);
+            //如果读操作，读数据源中随机获取一个数据源
+            int randomNum = ThreadLocalRandom.current().nextInt(0, readDataSourceKeyList.size());
+            String dataSourceKey = (String) readDataSourceKeyList.get(randomNum);
             LOGGER.debug("operateType: read");
             LOGGER.debug("dataSourceKey: " + dataSourceKey);
 

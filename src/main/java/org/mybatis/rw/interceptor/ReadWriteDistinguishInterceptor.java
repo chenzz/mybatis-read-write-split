@@ -1,4 +1,4 @@
-package org.mybatis.rw;
+package org.mybatis.rw.interceptor;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -6,6 +6,8 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.mybatis.rw.holder.DbOperationType;
+import org.mybatis.rw.holder.DbOperationTypeHolder;
 
 import java.util.Properties;
 
