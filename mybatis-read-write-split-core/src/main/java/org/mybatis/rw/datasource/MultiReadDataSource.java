@@ -24,6 +24,12 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
     private Map<Object, Object> allDataSources;
     private List<Object> readDataSourceKeyList;
 
+    private volatile boolean readWriteSplitSwitch = true;
+
+    public void setReadWriteSplitSwitch(boolean readWriteSplitSwitch) {
+        this.readWriteSplitSwitch = readWriteSplitSwitch;
+    }
+
     public void setMasterDataSource(Object masterDataSource) {
         this.masterDataSource = masterDataSource;
     }
@@ -71,6 +77,12 @@ public class MultiReadDataSource extends AbstractRoutingDataSource
     @Override
     protected Object determineCurrentLookupKey()
     {
+
+        //如果读写分离关闭了，则直接返回主库
+        if (!readWriteSplitSwitch) {
+            return MASTER;
+        }
+
         DbOperationType dbOperationType = DbOperationTypeHolder.getDataSourceType();
 
         if (DbOperationType.READ == dbOperationType) {
