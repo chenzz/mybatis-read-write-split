@@ -21,7 +21,7 @@ mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类�
 ```xml
         <dependency>
             <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-read-write-split</artifactId>
+            <artifactId>mybatis-read-write-split-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 ```
