@@ -15,6 +15,11 @@ public class UserService {
 
 
     @DataSource(DataSourceType.MASTER)
+    public User getUserByIdFromMaster(Integer userId) {
+
+        return userMapper.getUserById(userId);
+    }
+
     public User getUserById(Integer userId) {
 
         return userMapper.getUserById(userId);

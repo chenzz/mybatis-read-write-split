@@ -18,6 +18,13 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    public void testGetUserByIdFromMaster() {
+        User user = userService.getUserByIdFromMaster(1);
+        Assert.assertNotNull(user);
+        System.out.println(user);
+    }
+
+    @Test
     public void testGetUserById() {
         User user = userService.getUserById(1);
         Assert.assertNotNull(user);
