@@ -12,20 +12,15 @@
 以上两种模式可以混合使用：缺省自动解析sql的读写类型，如果注解有指定数据源，则根据注解进行路由。
 
 ### 2、用法
-
-
-
 * pom.xml 添加依赖
 
 ```xml
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-read-write-split-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
 ```
-
-
 
 * 配置数据源
 
@@ -62,7 +57,7 @@ mybatis自动分析读or写操作，并进行相应的路由操作
 
 ```xml
    <plugins>
-        <plugin interceptor="org.mybatis.rw.ReadWriteDistinguishInterceptor">
+        <plugin interceptor="org.mybatis.rw.interceptor.ReadWriteDistinguishInterceptor">
         </plugin>
     </plugins>
 ```
@@ -87,8 +82,6 @@ mybatis自动分析读or写操作，并进行相应的路由操作
 
 #### 2.1、业务透明区分读写
 ![](https://raw.githubusercontent.com/chenzz/static-resource/master/941DC39B-846A-4F86-8F61-F810F9543AB0.png)
-
-
 
 1. Mapper调用MyBatis进行读写
 2. MyBatis分析读写类型，并存入ThreadLocal中
