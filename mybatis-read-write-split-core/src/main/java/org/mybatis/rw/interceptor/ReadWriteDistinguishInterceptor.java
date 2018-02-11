@@ -6,8 +6,8 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.mybatis.rw.holder.DbOperationType;
-import org.mybatis.rw.holder.DbOperationTypeHolder;
+import org.mybatis.rw.constant.DbOperationType;
+import org.mybatis.rw.holder.DataSourceInfoHolder;
 
 import java.util.Properties;
 
@@ -31,9 +31,9 @@ public class ReadWriteDistinguishInterceptor implements Interceptor {
         System.out.println(mappedStatement.getSqlCommandType());
 
         if (SqlCommandType.SELECT == mappedStatement.getSqlCommandType()) {
-            DbOperationTypeHolder.setDataSourceType(DbOperationType.READ);
+            DataSourceInfoHolder.setDbOperationType(DbOperationType.READ);
         } else {
-            DbOperationTypeHolder.setDataSourceType(DbOperationType.UPDATE);
+            DataSourceInfoHolder.setDbOperationType(DbOperationType.UPDATE);
         }
 
         return invocation.proceed();

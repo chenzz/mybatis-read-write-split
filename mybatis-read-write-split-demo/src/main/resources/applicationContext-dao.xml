@@ -54,7 +54,7 @@
     </bean>
 
     <!--替换原本的DataSource-->
-    <bean id="dataSource" class="org.mybatis.rw.datasource.MultiReadDataSource">
+    <bean id="dataSource" class="org.mybatis.rw.datasource.ReadWriteSplitSource">
         <property name="masterDataSource" ref="masterDataSource"/>
         <property name="slaveDataSourceList">
             <list>

@@ -10,6 +10,8 @@ public interface UserMapper {
 
     User getUserById(Integer userId);
 
+    User getUserById2(Integer userId);
+
     List<User> getAllUsers();
 
     void updateUser(User user);

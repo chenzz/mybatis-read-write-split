@@ -1,4 +1,4 @@
-package org.mybatis.rw.holder;
+package org.mybatis.rw.constant;
 
 /**
  * @Author: chenzz
