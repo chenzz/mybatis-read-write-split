@@ -2,19 +2,18 @@
 
 ### 1、简介
 
-* 用处
+前段时间有项目有读写分离的需要，因此完成了该类库`mybatis-read-write-split`来实现读写分离。
 
-mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类库。
+* 特点
+支持两种模式的主备分离：
+1. 业务透明的读写分离。自动解析sql的读写类型并进行路由转发。
+2. 基于注解的读写分离。通过注解中的配置来进行读写分离。
 
-* 原理
-
-通过设置主库进行写操作，多个备库进行读操作。
-
-* 好处
-
-有效减小了DB的压力，提高了DB的并发能力。
+以上两种模式可以混合使用：缺省自动解析sql的读写类型，如果注解有指定数据源，则根据注解进行路由。
 
 ### 2、用法
+
+
 
 * pom.xml 添加依赖
 
@@ -26,14 +25,7 @@ mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类�
         </dependency>
 ```
 
-* mybatis配置文件添加interceptor
 
-```xml
-   <plugins>
-        <plugin interceptor="org.mybatis.rw.ReadWriteDistinguishInterceptor">
-        </plugin>
-    </plugins>
-```
 
 * 配置数据源
 
@@ -62,12 +54,51 @@ mybatis-read-write-split 用来实现**业务透明**的读写分离mybatis类�
     </bean>
 ```
 
+#### 2.1、业务透明区分读写
+
+mybatis自动分析读or写操作，并进行相应的路由操作
+
+* mybatis配置文件添加interceptor
+
+```xml
+   <plugins>
+        <plugin interceptor="org.mybatis.rw.ReadWriteDistinguishInterceptor">
+        </plugin>
+    </plugins>
+```
+
+#### 2.2、通过注解区分读写
+
+通过方法上的注解显示指定读主库or备库
+
+* 在目标方法上添加 `@DataSource()`
+
+如
+
+```java
+    @DataSource(DataSourceType.MASTER)
+    public User getUserByIdFromMaster(Integer userId) {
+        //some operation
+    }
+```
+
+
 ### 3、内部实现
 
-![](https://ws3.sinaimg.cn/large/006tNc79ly1fnxk33nhwdj315f0uqtbm.jpg)
+#### 2.1、业务透明区分读写
+![](https://raw.githubusercontent.com/chenzz/static-resource/master/941DC39B-846A-4F86-8F61-F810F9543AB0.png)
+
+
 
 1. Mapper调用MyBatis进行读写
 2. MyBatis分析读写类型，并存入ThreadLocal中
-3. 自定义DataSource从ThreadLocal里获取读写类型，根据读写类型通过对应的DataSource
-4. 使用选出的DataSource进行读写操作
+3. 自定义DataSource从ThreadLocal里获取读写类型，路由给对应的子DataSource
+4. 使用对应的子DataSource进行读写操作
+
+#### 2.2、通过注解实现读写区分
+
+1. Spring的切面读取注解的内容，分析 读/写 操作
+2. 把分析结果丢到 ThreadLocal中
+3. 自定义DataSource从ThreadLocal里获取DataSource类型，路由给对应的子DataSource
+4. 使用对应的子DataSource进行读写操作
 
